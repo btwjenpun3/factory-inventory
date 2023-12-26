@@ -59,7 +59,7 @@ Route::prefix('/master/item')
         Route::post('/store', 'itemStore')->name('store');
         Route::get('/show/{id}', 'itemShow')->name('show');
         Route::post('/update/{id}', 'itemUpdate');
-        Route::delete('/delete/{item}', 'itemDelete')->name('delete');
+        Route::delete('/delete/{id}', 'itemDelete')->name('delete');
     }); 
 
 Route::prefix('/master/buyer')

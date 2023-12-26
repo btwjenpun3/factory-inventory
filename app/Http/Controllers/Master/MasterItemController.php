@@ -66,7 +66,7 @@ class MasterItemController extends Controller
     public function itemDelete(Request $request)
     {
         try {
-            Item::where('items', $request->item)->delete();
+            Item::where('id_item', $request->id)->delete();
             return response()->json(['success' => 'Data successfully deleted'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to delete data'], 500);
