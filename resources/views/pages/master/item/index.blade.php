@@ -5,27 +5,30 @@
 @endsection
 
 @section('content')
-    <div class="mb-3">
-        <button class="btn btn-primary" data-toggle="collapse" data-target="#createCollapse">Tambah</button>
-    </div>
-
-    <div class="collapse multi-collapse" id="createCollapse">
-        <div class="container">
-            <div id="success"></div>
-            <div id="error"></div>
-            <x-adminlte-card class="mt-4" title="Create Master Item">
-                <x-adminlte-select id="code_buyer" name="code_buyer" label="Code Buyer">
-                    @foreach ($buyers as $buyer)
-                        <option value="{{ $buyer->code }}">{{ $buyer->code }} - {{ $buyer->name }}</option>
-                    @endforeach
-                </x-adminlte-select>
-                <x-adminlte-input id="items" name="items" label="Item" />
-                <x-adminlte-input id="desc" name="desc" label="Description" />
-                <x-adminlte-button type="submit" label="Save" theme="primary" onclick="store()" />
-            </x-adminlte-card>
+    @can('admin-only')
+        <div class="mb-3">
+            <button class="btn btn-primary" data-toggle="collapse" data-target="#createCollapse">Tambah</button>
         </div>
-    </div>
 
+        <div class="collapse multi-collapse" id="createCollapse">
+            <div class="container">
+                <div id="success"></div>
+                <div id="error"></div>
+                <x-adminlte-card class="mt-4" title="Create Master Item">
+                    <x-adminlte-select id="code_buyer" name="code_buyer" label="Code Buyer">
+                        @foreach ($buyers as $buyer)
+                            <option value="{{ $buyer->code }}">{{ $buyer->code }} - {{ $buyer->name }}</option>
+                        @endforeach
+                    </x-adminlte-select>
+                    <x-adminlte-input id="items" name="items" label="Item" />
+                    <x-adminlte-input id="desc" name="desc" label="Description" />
+                    <x-adminlte-button type="submit" label="Save" theme="primary" onclick="store()" />
+                </x-adminlte-card>
+            </div>
+        </div>
+    @endcan
+
+    <div id="edit_success"></div>
     <x-adminlte-card class="mt-4" title="Master Item">
         <table class="table table-striped table-hover responsive" id="item">
             <thead class="thead-dark">
@@ -41,6 +44,7 @@
 
     <x-adminlte-modal id="editModal" title="Edit Master Item" theme="primary" size="md" disable-animations>
         <div class="container">
+            <div id="edit_failed"></div>
             <x-adminlte-card class="mt-4" title="Edit Master Item">
                 <x-adminlte-select id="edit_code_buyer" name="code_buyer" label="Code Buyer">
                     @foreach ($buyers as $buyer)
@@ -85,14 +89,25 @@
                         name: 'desc',
                     },
                     {
-                        data: 'items',
-                        name: 'items',
+                        data: 'id_item',
+                        name: 'id_item',
                         render: function(data, type, row) {
-                            var getItem = "'" + row.items + "'";
-                            return '<button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal" onclick="edit(' +
-                                getItem +
-                                ')">Edit</button> <button class="btn btn-sm btn-danger" onclick="deleteItem(' +
-                                getItem + ')">Delete</button>';
+                            var getItem = row.id_item;
+                            var canEdit =
+                                @can('admin-only')
+                                    true
+                                @else
+                                    false
+                                @endcan ;
+                            var editButton = canEdit ?
+                                '<button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal" onclick="edit(' +
+                                getItem + ')">Edit</button>' :
+                                '';
+                            var deleteButton = canEdit ?
+                                '<button class="btn btn-sm btn-danger" onclick="deleteItem(' +
+                                getItem + ')">Delete</button>' :
+                                '';
+                            return editButton + ' ' + deleteButton;
                         }
                     },
                 ]
@@ -136,9 +151,8 @@
 
         function edit(item) {
             getItem = item;
-            var encodedItem = encodeURIComponent(getItem);
             $.ajax({
-                url: '/master/item/show/' + encodedItem,
+                url: '/master/item/show/' + getItem,
                 type: 'GET',
                 success: function(response) {
                     console.log(response);
@@ -151,10 +165,9 @@
         }
 
         $(document).ready(function() {
-            var itemData = getItem;
             $('#update').click(function() {
                 $.ajax({
-                    url: '/master/item/update/' + itemData,
+                    url: '/master/item/update/' + getItem,
                     type: 'post',
                     data: {
                         code_buyer: $('#edit_code_buyer').val(),
@@ -169,7 +182,8 @@
                         successMessage.className =
                             "alert alert-success";
                         successMessage.textContent = response.success;
-                        $('#result').html(successMessage);
+                        $('#editModal').modal('hide');
+                        $('#edit_success').html(successMessage);
                         $('#item').DataTable().ajax.reload();
                         setTimeout(function() {
                             successMessage.remove();
@@ -180,7 +194,7 @@
                             "div");
                         errorMessage.className = "alert alert-danger";
                         errorMessage.textContent = xhr.responseJSON.message;
-                        $('#result_fails').html(errorMessage);
+                        $('#edit_failed').html(errorMessage);
                         setTimeout(function() {
                             errorMessage.remove();
                         }, 5000);

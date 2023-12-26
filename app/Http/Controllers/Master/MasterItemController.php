@@ -39,7 +39,7 @@ class MasterItemController extends Controller
 
     public function itemShow(Request $request)
     {
-        $data = Item::where('items', $request->item)->first();
+        $data = Item::where('id_item', $request->id)->first();
         return response()->json($data);
     }
 
@@ -52,7 +52,7 @@ class MasterItemController extends Controller
         ]);
         if($validate) 
         {
-            Item::where('items', $request->items)->update([
+            Item::where('id_item', $request->id)->update([
                 'code_buyer'    => $request->code_buyer,
                 'items'         => $request->items,
                 'desc'          => $request->desc

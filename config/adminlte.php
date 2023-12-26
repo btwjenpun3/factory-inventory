@@ -254,7 +254,7 @@ return [
 
     'use_route_url' => false,
     'dashboard_url' => '/',
-    'logout_url' => 'logout',
+    'logout_url' => 'auth/logout',
     'login_url' => 'auth/login',
     'register_url' => 'auth/register',
     'password_reset_url' => 'password/reset',
@@ -294,7 +294,7 @@ return [
         [
             'type'         => 'navbar-search',
             'text'         => 'search',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
         [
             'type'         => 'fullscreen-widget',
@@ -336,7 +336,7 @@ return [
         [
             'text' => 'Purchase',
             'route'  => 'purchase.index',
-            'icon' => 'fas fa-fw fa-file-invoice',
+            'icon' => 'fas fa-fw fa-file-invoice'
         ],
         [
             'text'    => 'Warehouse',
