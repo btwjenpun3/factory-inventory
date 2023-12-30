@@ -1,10 +1,41 @@
 @extends('adminlte::page')
 
-@section('content_header')
-    <h1>Purchase</h1>
-@endsection
-
 @section('content')
+    <div class="pt-4">
+        <button type="button" class="btn-sm btn-primary" data-toggle="collapse" data-target="#createCollapse">
+            <i class="fas fa-search"></i> Search Data
+        </button>
+    </div>
+    <div class="collapse multi-collapse" id="createCollapse">
+        <div class="container-fluid pt-4">
+            <div class="row gx-5">
+                <div class="col">
+                    <x-adminlte-input name="kp" label="Nomor KP" placeholder="Masukkan nomor kartu purchase"
+                        igroup-size="sm">
+                    </x-adminlte-input>
+                    <x-adminlte-input name="item" label="Item" placeholder="Masukkan item" igroup-size="sm" />
+                    <x-adminlte-input name="desc" label="Description" placeholder="Masukkan description"
+                        igroup-size="sm" />
+                    <x-adminlte-select2 name="supplier" label="Supplier" igroup-size="sm">
+                        <option value="" selected>- Pilih Supplier -</option>
+                        @foreach ($suppliers as $supplier)
+                            <option value="{{ $supplier->supplier }}">{{ $supplier->supplier }}</option>
+                        @endforeach
+                    </x-adminlte-select2>
+                </div>
+                <div class="col">
+                    <x-adminlte-input name="iLabel" label="ETA" placeholder="Masukkan Estimated Arrived"
+                        igroup-size="sm" />
+                    <x-adminlte-input name="iLabel" label="ETD" placeholder="Masukkan Estimated Date"
+                        igroup-size="sm" />
+                    <x-adminlte-input name="iLabel" label="No Kapal" placeholder="Masukkan Nomor Kapal" igroup-size="sm" />
+                </div>
+            </div>
+        </div>
+        <div class="col text-right">
+            <x-adminlte-button label="Search" id="searchTable" theme="success" class="btn-sm" />
+        </div>
+    </div>
     <x-adminlte-card class="mt-4" title="Purchase">
         <table class="table table-striped table-hover responsive" id="purchase">
             <thead class="thead-dark">
@@ -35,7 +66,7 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('#purchase').DataTable({
+            dataTable = $('#purchase').DataTable({
                 responsive: true,
                 paginate: true,
                 autoWidth: false,
@@ -116,5 +147,24 @@
                 ]
             });
         });
+
+        // Tambahkan event listener untuk tombol pencarian
+        $('#searchTable').on('click', function() {
+            var kpValue = $('input[name="kp"]').val();
+            var itemValue = $('input[name="item"]').val();
+            var descValue = $('input[name="desc"]').val();
+            var supplierValue = $('select[name="supplier"]').val();
+
+            // Lakukan pencarian dengan mengirimkan nilai KP ke server
+            dataTable.search(kpValue + ' ' + itemValue + ' ' + descValue + ' ' + supplierValue).draw();
+        });
     </script>
+@endsection
+
+@section('css')
+    <style>
+        .dataTables_wrapper .dataTables_filter {
+            display: none;
+        }
+    </style>
 @endsection
