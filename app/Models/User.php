@@ -14,6 +14,8 @@ class User extends Authenticatable
 
     protected $table = 'web_user';
 
+    protected $primaryKey = 'id';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,5 +47,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-    ];
+    ];    
+
+    public function role() 
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }    
 }

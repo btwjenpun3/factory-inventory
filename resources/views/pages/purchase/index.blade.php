@@ -11,8 +11,7 @@
             <div class="row gx-5">
                 <div class="col">
                     <x-adminlte-input name="kp" label="Nomor KP" placeholder="Masukkan nomor kartu purchase"
-                        igroup-size="sm">
-                    </x-adminlte-input>
+                        igroup-size="sm" />
                     <x-adminlte-input name="item" label="Item" placeholder="Masukkan item" igroup-size="sm" />
                     <x-adminlte-input name="desc" label="Description" placeholder="Masukkan description"
                         igroup-size="sm" />

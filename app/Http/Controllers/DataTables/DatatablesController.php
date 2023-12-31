@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Buyer;
 use App\Models\Kp;
 use App\Models\Supplier;
+use App\Models\User;
 use App\Models\WarehouseRequest;
 
 class DatatablesController extends Controller
@@ -52,6 +53,12 @@ class DatatablesController extends Controller
     public function warehouseRequest()
     {
         $data = WarehouseRequest::get();
+        return DataTables::of($data)->toJson();
+    }
+
+    public function users()
+    {
+        $data = User::get();
         return DataTables::of($data)->toJson();
     }
 }

@@ -318,6 +318,7 @@ return [
                 [
                     'text' => 'Master Item',
                     'route'  => 'master.item.index',
+                    'can' => 'view-master-item'
                 ],
                 [
                     'text' => 'Master Buyer',
@@ -336,7 +337,8 @@ return [
         [
             'text' => 'Purchase',
             'route'  => 'purchase.index',
-            'icon' => 'fas fa-fw fa-file-invoice'
+            'icon' => 'fas fa-fw fa-file-invoice',
+            'can' => 'view-purchase'
         ],
         [
             'text'    => 'Warehouse',
@@ -351,7 +353,23 @@ return [
                     'route'  => 'warehouse.request.index',
                 ]
             ],
+        ],        
+        [
+            'header' => 'System',
+            'can' => 'admin-only'
         ],
+        [
+            'text' => 'Users',
+            'route'  => 'user.index',
+            'icon' => 'fas fa-user',
+            'can' => 'admin-only'
+        ],
+        [
+            'text' => 'Settings',
+            'route'  => 'setting.index',
+            'icon' => 'fas fa-cog',
+            'can' => 'admin-only'
+        ],        
         // ['header' => 'account_settings'],
         // [
         //     'text' => 'profile',

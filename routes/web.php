@@ -7,6 +7,8 @@ use App\Http\Controllers\Master\MasterItemController;
 use App\Http\Controllers\Master\MasterKpController;
 use App\Http\Controllers\Master\MasterSupplierController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\System\SettingController;
+use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\Warehouse\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +50,7 @@ Route::prefix('/datatables')
         Route::get('/purchase', 'purchase')->name('purchase');
         Route::get('/warehouse-receive', 'warehouseReceive')->name('warehouse.receive');
         Route::get('/warehouse-request', 'warehouseRequest')->name('warehouse.request');
+        Route::get('/users', 'users')->name('users');
     });
 
 Route::prefix('/master/item')
@@ -102,3 +105,19 @@ Route::prefix('/warehouse')
         Route::get('/receive', 'receiveIndex')->name('receive.index');
         Route::get('/request', 'requestIndex')->name('request.index');
     }); 
+
+Route::prefix('/settings')
+    ->name('setting.')
+    ->middleware('islogin')
+    ->controller(SettingController::class)
+    ->group(function() {
+        Route::get('/', 'index')->name('index');
+    }); 
+    
+Route::prefix('/users')
+    ->name('user.')
+    ->middleware('islogin')
+    ->controller(UserController::class)
+    ->group(function() {
+        Route::get('/', 'index')->name('index');
+    });
