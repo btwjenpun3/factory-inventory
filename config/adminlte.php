@@ -365,6 +365,12 @@ return [
             'can' => 'admin-only'
         ],
         [
+            'text' => 'Roles',
+            'route'  => 'role.index',
+            'icon' => 'fas fa-lock',
+            'can' => 'admin-only'
+        ],
+        [
             'text' => 'Settings',
             'route'  => 'setting.index',
             'icon' => 'fas fa-cog',

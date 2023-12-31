@@ -10,6 +10,7 @@ use App\Models\Buyer;
 use App\Models\Kp;
 use App\Models\Supplier;
 use App\Models\User;
+use App\Models\Role;
 use App\Models\WarehouseRequest;
 
 class DatatablesController extends Controller
@@ -58,7 +59,13 @@ class DatatablesController extends Controller
 
     public function users()
     {
-        $data = User::get();
+        $data = User::with('role')->get();
+        return DataTables::of($data)->toJson();
+    }
+
+    public function roles()
+    {
+        $data = Role::with('permissions')->get();
         return DataTables::of($data)->toJson();
     }
 }

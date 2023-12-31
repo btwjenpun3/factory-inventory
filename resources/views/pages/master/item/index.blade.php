@@ -155,7 +155,6 @@
                 url: '/master/item/show/' + getItem,
                 type: 'GET',
                 success: function(response) {
-                    console.log(response);
                     document.getElementById('edit_code_buyer').value = response.code_buyer;
                     document.getElementById('edit_items').value = response.items;
                     document.getElementById('edit_desc').value = response.desc;

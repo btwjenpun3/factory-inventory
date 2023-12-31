@@ -7,6 +7,7 @@ use App\Http\Controllers\Master\MasterItemController;
 use App\Http\Controllers\Master\MasterKpController;
 use App\Http\Controllers\Master\MasterSupplierController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\System\SettingController;
 use App\Http\Controllers\System\UserController;
 use App\Http\Controllers\Warehouse\WarehouseController;
@@ -51,6 +52,7 @@ Route::prefix('/datatables')
         Route::get('/warehouse-receive', 'warehouseReceive')->name('warehouse.receive');
         Route::get('/warehouse-request', 'warehouseRequest')->name('warehouse.request');
         Route::get('/users', 'users')->name('users');
+        Route::get('/roles', 'roles')->name('roles');
     });
 
 Route::prefix('/master/item')
@@ -120,4 +122,19 @@ Route::prefix('/users')
     ->controller(UserController::class)
     ->group(function() {
         Route::get('/', 'index')->name('index');
+        Route::get('/name/{id}', 'getName');
+        Route::get('/show/{id}', 'edit');
+        Route::post('/create', 'create');
+        Route::post('/update/{id}', 'update');
+        Route::delete('/delete/{id}', 'delete');
+    });
+
+Route::prefix('/roles')
+    ->name('role.')
+    ->middleware('islogin')
+    ->controller(RoleController::class)
+    ->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/show/{id}', 'edit')->name('edit');
+        Route::post('/update/{id}', 'update')->name('update');
     });
