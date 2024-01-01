@@ -5,28 +5,26 @@
 @endsection
 
 @section('content')
-    @can('admin-only')
-        <div class="mb-3">
-            <button class="btn btn-primary" data-toggle="collapse" data-target="#createCollapse">Tambah</button>
-        </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" data-toggle="collapse" data-target="#createCollapse">Tambah</button>
+    </div>
 
-        <div class="collapse multi-collapse" id="createCollapse">
-            <div class="container">
-                <div id="success"></div>
-                <div id="error"></div>
-                <x-adminlte-card class="mt-4" title="Create Master Item">
-                    <x-adminlte-select id="code_buyer" name="code_buyer" label="Code Buyer">
-                        @foreach ($buyers as $buyer)
-                            <option value="{{ $buyer->code }}">{{ $buyer->code }} - {{ $buyer->name }}</option>
-                        @endforeach
-                    </x-adminlte-select>
-                    <x-adminlte-input id="items" name="items" label="Item" />
-                    <x-adminlte-input id="desc" name="desc" label="Description" />
-                    <x-adminlte-button type="submit" label="Save" theme="primary" onclick="store()" />
-                </x-adminlte-card>
-            </div>
+    <div class="collapse multi-collapse" id="createCollapse">
+        <div class="container">
+            <div id="success"></div>
+            <div id="error"></div>
+            <x-adminlte-card class="mt-4" title="Create Master Item">
+                <x-adminlte-select id="code_buyer" name="code_buyer" label="Code Buyer">
+                    @foreach ($buyers as $buyer)
+                        <option value="{{ $buyer->code }}">{{ $buyer->code }} - {{ $buyer->name }}</option>
+                    @endforeach
+                </x-adminlte-select>
+                <x-adminlte-input id="items" name="items" label="Item" />
+                <x-adminlte-input id="desc" name="desc" label="Description" />
+                <x-adminlte-button type="submit" label="Save" theme="primary" onclick="store()" />
+            </x-adminlte-card>
         </div>
-    @endcan
+    </div>
 
     <div id="edit_success"></div>
     <x-adminlte-card class="mt-4" title="Master Item">

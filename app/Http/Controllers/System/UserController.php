@@ -93,7 +93,7 @@ class UserController extends Controller
     public function getName(Request $request) 
     {
         try {
-            $user = User::where('id', $request->id)->firstOrFail();
+            $user = User::select('name')->where('id', $request->id)->firstOrFail();
             return response()->json($user);
         } catch(\Exception $e) {
             Log::error($e->getMessage());

@@ -14,7 +14,7 @@ class Role extends Model
     protected $primaryKey = 'id'; 
 
     protected $fillable = [
-        'role'
+        'name'
     ];
 
     public $timestamps = false;    

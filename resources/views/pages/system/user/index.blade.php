@@ -90,21 +90,28 @@
                         render: function(data) {
                             if (data == 'admin') {
                                 return '<span class="badge badge-danger">' + data + '</span>';
-                            } else if (data != 'admin') {
+                            } else if (data != 'admin' && data != null) {
                                 return '<span class="badge badge-primary">' + data + '</span>';
                             } else {
-                                return '<span class="badge badge-secondary">Role not found</span>';
+                                return '<span class="badge badge-secondary">role not found</span>';
                             }
                         }
                     },
                     {
-                        data: 'id',
-                        name: 'id',
-                        render: function(data) {
-                            return '<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#editModal" onclick="edit(' +
-                                data +
-                                ')">Edit</button> <button class="btn btn-xs btn-danger" onclick="deleteUser(' +
-                                data + ')">Delete</button>';
+                        data: 'role.name',
+                        name: 'role.name',
+                        render: function(data, type, full, meta) {
+                            if (data === 'admin') {
+                                return '<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#editModal" onclick="edit(' +
+                                    full.id +
+                                    ')">Edit</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-xs btn-primary" data-toggle="modal" data-target="#editModal" onclick="edit(' +
+                                    full.id +
+                                    ')">Edit</button> <button class="btn btn-xs btn-danger" onclick="deleteUser(' +
+                                    full.id + ')">Delete</button>';
+                            }
+
                         }
                     }
                 ]

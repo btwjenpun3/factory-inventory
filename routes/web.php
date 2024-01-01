@@ -121,11 +121,11 @@ Route::prefix('/users')
     ->middleware('islogin')
     ->controller(UserController::class)
     ->group(function() {
-        Route::get('/', 'index')->name('index');
-        Route::get('/name/{id}', 'getName');
+        Route::get('/', 'index')->name('index');        
         Route::get('/show/{id}', 'edit');
         Route::post('/create', 'create');
         Route::post('/update/{id}', 'update');
+        Route::get('/name/{id}', 'getName');
         Route::delete('/delete/{id}', 'delete');
     });
 
@@ -135,6 +135,9 @@ Route::prefix('/roles')
     ->controller(RoleController::class)
     ->group(function() {
         Route::get('/', 'index')->name('index');
+        Route::post('/create', 'create')->name('create');
         Route::get('/show/{id}', 'edit')->name('edit');
         Route::post('/update/{id}', 'update')->name('update');
+        Route::get('/name/{id}', 'getRole');
+        Route::delete('/delete/{id}', 'delete');
     });
