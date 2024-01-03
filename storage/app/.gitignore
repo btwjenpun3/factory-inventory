@@ -1,3 +1,5 @@
 *
+!certificates/
+!uploaded_certificates/
 !public/
 !.gitignore
