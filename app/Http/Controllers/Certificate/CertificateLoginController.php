@@ -43,14 +43,13 @@ class CertificateLoginController extends Controller
                     return redirect()->route('auth.login.index');
                 }
                 Storage::delete($path);
-                return redirect()->back()->with(['error' => 'Invalid Certificate!']);
+                return redirect()->back()->with(['error' => 'Invalid Certificate or Private Key not found!']);
             } else {                
                 return redirect()->back()->with(['error' => 'Invalid Certificate!']);
             }            
         } catch(\Exception $e) {
             return redirect()->back()->with(['error' => 'Forbidden. Please use valid file!']);
-        }
-        
+        }        
     }
 
     private function validateCertificate($certificatePath)
