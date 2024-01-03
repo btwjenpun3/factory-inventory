@@ -371,6 +371,12 @@ return [
             'can' => 'admin-only'
         ],
         [
+            'text' => 'Certificates',
+            'route'  => 'certificate.index',
+            'icon' => 'fas fa-certificate',
+            'can' => 'admin-only'
+        ],
+        [
             'text' => 'Settings',
             'route'  => 'setting.index',
             'icon' => 'fas fa-cog',

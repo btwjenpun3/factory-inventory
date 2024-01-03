@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Certificate\CertificateController;
+use App\Http\Controllers\Certificate\CertificateLoginController;
 use App\Http\Controllers\DataTables\DatatablesController;
 use App\Http\Controllers\Master\MasterBuyerController;
 use App\Http\Controllers\Master\MasterItemController;
@@ -28,14 +30,23 @@ Route::get('/', function () {
     return view('main.index');
 })->middleware('islogin');
 
+Route::prefix('/verify')
+    ->name('verify.')
+    ->controller(CertificateLoginController::class)
+    ->group(function() {
+        Route::get('/upload', 'index')->name('index');
+        Route::post('/upload', 'authenticateWithCertificate')->name('login');
+        Route::get('/purge', 'purgeCertificateSession')->name('purge');
+    });
+
 Route::prefix('/auth')
     ->name('auth.')
-    ->controller(AuthController::class)
+    ->controller(AuthController::class)    
     ->group(function() {
-        Route::get('/login', 'loginIndex')->name('login.index');
-        Route::post('/login', 'loginProcess');
-        Route::get('/register', 'registerIndex');        
-        Route::post('/register', 'registerProcess');
+        Route::get('/login', 'loginIndex')->name('login.index')->middleware('authenticate-with-certificate');
+        Route::post('/login', 'loginProcess')->middleware('authenticate-with-certificate');
+        Route::get('/register', 'registerIndex')->middleware('authenticate-with-certificate');        
+        Route::post('/register', 'registerProcess')->middleware('authenticate-with-certificate');
         Route::post('/logout', 'logout')->middleware('islogin');
     });
 
@@ -53,6 +64,7 @@ Route::prefix('/datatables')
         Route::get('/warehouse-request', 'warehouseRequest')->name('warehouse.request');
         Route::get('/users', 'users')->name('users');
         Route::get('/roles', 'roles')->name('roles');
+        Route::get('/certificates', 'certificates')->name('certificates');
     });
 
 Route::prefix('/master/item')
@@ -140,4 +152,14 @@ Route::prefix('/roles')
         Route::post('/update/{id}', 'update')->name('update');
         Route::get('/name/{id}', 'getRole');
         Route::delete('/delete/{id}', 'delete');
+    });
+
+Route::prefix('/certificates')
+    ->name('certificate.')
+    ->middleware('islogin')
+    ->controller(CertificateController::class)
+    ->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::post('/generate/{id}', 'generateCertificate')->name('generate');
+        Route::get('/download/{id}', 'downloadCertificate')->name('download');
     });

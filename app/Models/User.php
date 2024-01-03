@@ -26,7 +26,9 @@ class User extends Authenticatable
         'email',
         'password',
         'role_id',
-        'status'
+        'status',
+        'private_key_path',
+        'public_certificate_path'
     ];
 
     /**

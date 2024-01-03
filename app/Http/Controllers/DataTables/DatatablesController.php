@@ -68,4 +68,10 @@ class DatatablesController extends Controller
         $data = Role::with('permissions')->get();
         return DataTables::of($data)->toJson();
     }
+
+    public function certificates(Request $request)
+    {
+        $data = User::get();
+        return DataTables::of($data)->toJson();
+    }
 }
