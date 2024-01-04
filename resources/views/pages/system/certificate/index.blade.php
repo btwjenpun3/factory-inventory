@@ -64,7 +64,11 @@
                     },
                     {
                         data: 'public_certificate_path',
-                        name: 'public_certificate_path'
+                        name: 'public_certificate_path',
+                        render: function(data, type, row) {
+                            var certificate = data.split('/').pop();
+                            return '<p class="text-info">' + certificate + '</p>';
+                        }
                     },
                     {
                         data: 'id',

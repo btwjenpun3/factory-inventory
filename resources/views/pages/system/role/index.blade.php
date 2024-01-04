@@ -76,7 +76,7 @@
                         render: function(data, type, full, meta) {
                             var permissionList = data.map(function(permission) {
                                 return '<li>' + permission.permission + '</li>';
-                            }).join('');
+                            }).sort().join('');
                             if (permissionList) {
                                 return '<ul>' + permissionList + '</ul>';
                             } else {

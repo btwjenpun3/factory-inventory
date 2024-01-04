@@ -38,6 +38,10 @@ class AuthServiceProvider extends ServiceProvider
             $checkKey       = Setting::where('setting', 'activation_code')->first();
             return $checkKey->value == $keyValue;
         });  
+
+       /**
+        * Dibawah ini adalah Gate yang terhubung dengan Permission
+        */
         
         Gate::define('view-purchase', function ($user) {
             $data = $user->role->permissions->pluck('permission');
@@ -47,6 +51,16 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('view-master-item', function ($user) {
             $data = $user->role->permissions->pluck('permission');
             return $data->contains('view-master-item');
+        });
+
+        Gate::define('view-graphic', function ($user) {
+            $data = $user->role->permissions->pluck('permission');
+            return $data->contains('view-graphic');
+        });
+
+        Gate::define('view-export', function ($user) {
+            $data = $user->role->permissions->pluck('permission');
+            return $data->contains('view-export');
         });
     }
 }

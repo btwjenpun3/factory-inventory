@@ -3,7 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Certificate\CertificateController;
 use App\Http\Controllers\Certificate\CertificateLoginController;
+use App\Http\Controllers\Chart\ChartController;
 use App\Http\Controllers\DataTables\DatatablesController;
+use App\Http\Controllers\Export\ExportController;
+use App\Http\Controllers\Graphic\GraphicController;
 use App\Http\Controllers\Master\MasterBuyerController;
 use App\Http\Controllers\Master\MasterItemController;
 use App\Http\Controllers\Master\MasterKpController;
@@ -67,6 +70,14 @@ Route::prefix('/datatables')
         Route::get('/certificates', 'certificates')->name('certificates');
     });
 
+Route::prefix('/charts')
+    ->name('chart.')
+    ->middleware('islogin')
+    ->controller(ChartController::class)
+    ->group(function() {
+        Route::get('/kp', 'kpChart')->name('kp');
+    });
+
 Route::prefix('/master/item')
     ->name('master.item.')
     ->middleware('islogin')
@@ -109,6 +120,7 @@ Route::prefix('/purchase')
     ->controller(PurchaseController::class)
     ->group(function() {
         Route::get('/', 'index')->name('index');
+        Route::get('/show/{id}', 'showDetail')->name('detail');
     }); 
 
 Route::prefix('/warehouse')
@@ -118,6 +130,23 @@ Route::prefix('/warehouse')
     ->group(function() {
         Route::get('/receive', 'receiveIndex')->name('receive.index');
         Route::get('/request', 'requestIndex')->name('request.index');
+    }); 
+
+Route::prefix('/graphics')
+    ->name('graphic.')
+    ->middleware('islogin')
+    ->controller(GraphicController::class)
+    ->group(function() {
+        Route::get('/', 'index')->name('index');
+    }); 
+
+Route::prefix('/exports')
+    ->name('export.')
+    ->middleware('islogin')
+    ->controller(ExportController::class)
+    ->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/export/excel', 'exportToExcel')->name('excel');
     }); 
 
 Route::prefix('/settings')

@@ -290,7 +290,7 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
+        // Navbar items:        
         [
             'type'         => 'navbar-search',
             'text'         => 'search',
@@ -306,11 +306,14 @@ return [
         //     'type' => 'sidebar-menu-search',
         //     'text' => 'search',
         // ],
+        // [
+        //     'text' => 'blog',
+        //     'url'  => 'admin/blog',
+        //     'can'  => 'manage-blog',
+        // ],   
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],        
+            'header' => 'DATA',
+        ],     
         [
             'text'    => 'Master',
             'icon'    => 'fas fa-fw fa-database',
@@ -353,9 +356,24 @@ return [
                     'route'  => 'warehouse.request.index',
                 ]
             ],
-        ],        
+        ], 
         [
-            'header' => 'System',
+            'header' => 'TOOLS',
+        ], 
+        [
+            'text' => 'Graphics',
+            'route'  => 'graphic.index',
+            'icon' => 'fas fa-chart-line',
+            'can' => 'view-graphic'
+        ], 
+        [
+            'text' => 'Export',
+            'route'  => 'export.index',
+            'icon' => 'fas fa-file-export',
+            'can' => 'view-export'
+        ],       
+        [
+            'header' => 'SYSTEM',
             'can' => 'admin-only'
         ],
         [
@@ -530,12 +548,12 @@ return [
             ],
         ],
         'Chartjs' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js',
+                    'location' => 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.0.1/chart.umd.js',
                 ],
             ],
         ],

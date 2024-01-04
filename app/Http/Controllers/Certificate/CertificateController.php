@@ -52,13 +52,13 @@ class CertificateController extends Controller
     protected function generateKeyPair()
     {        
         $dn = [
-            "countryName" => "ID",
-            "stateOrProvinceName" => "Indonesia",
-            "localityName" => "Ungaran",
-            "organizationName" => "IT Inventory",
-            "organizationalUnitName" => "It Inventory Team",
-            "commonName" => "Muhamad Helmi",
-            "emailAddress" => "muhamadkelmi@gmail.com"
+            "countryName"               => "ID",
+            "stateOrProvinceName"       => "Indonesia",
+            "localityName"              => "Ungaran",
+            "organizationName"          => "IT Inventory",
+            "organizationalUnitName"    => "It Inventory Team",
+            "commonName"                => "Muhamad Helmi",
+            "emailAddress"              => "muhamadkelmi@gmail.com"
         ];
         
         // Generate a new private (and public) key pair
@@ -78,7 +78,7 @@ class CertificateController extends Controller
 
         if (openssl_csr_export($csr, $csrout) && openssl_x509_export($x509, $certout) && openssl_pkey_export($privateKey, $pkeyout, $this->getPassphrase())) {
             return [
-                'privateKey' => $pkeyout,
+                'privateKey'        => $pkeyout,
                 'publicCertificate' => $certout
             ];
         } else {

@@ -54,7 +54,7 @@
         <div class="card py-5 px-3">
             <h5 class="m-0 mb-3 text-center">Certificate Verification</h5>
             <span class="mobile-text text-center">
-                Please upload your valid <code>Certificate</code> to continue
+                Please submit your valid <code>Certificate</code> to continue
             </span>
             @if (session()->has('error'))
                 <div class="alert alert-danger mt-4" role="alert">
@@ -67,7 +67,7 @@
                     <input type="file" name="certificate" class="form-control">
                 </div>
                 <div class="text-center mt-4">
-                    <button class="btn btn=xs btn-primary" type="submit">Upload</button>
+                    <button class="btn btn=xs btn-primary" type="submit">Submit</button>
                 </div>
             </form>
         </div>

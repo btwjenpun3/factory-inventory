@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-6">
                 <x-adminlte-card class="mt-4" title="Product Activation">
-                    <x-adminlte-input name="key" label="Activation Key" igroup-size="sm">
+                    <x-adminlte-input name="key" label="License Key" igroup-size="sm">
                         <x-slot name="appendSlot">
                             <x-adminlte-button theme="btn btn-primary" label="Submit" />
                         </x-slot>
