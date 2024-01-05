@@ -14,8 +14,6 @@
                     <x-adminlte-input name="kp" label="Nomor KP" placeholder="Masukkan nomor kartu purchase"
                         igroup-size="sm" />
                     <x-adminlte-input name="item" label="Item" placeholder="Masukkan item" igroup-size="sm" />
-                    <x-adminlte-input name="desc" label="Description" placeholder="Masukkan description" igroup-size="sm"
-                        disabled />
                     <x-adminlte-select2 name="supplier" label="Supplier" igroup-size="sm">
                         <option value="" selected>- Pilih Supplier -</option>
                         @foreach ($suppliers as $supplier)
@@ -24,12 +22,13 @@
                     </x-adminlte-select2>
                 </div>
                 <div class="col">
-                    <x-adminlte-input name="eta" label="ETA" placeholder="Masukkan Estimated Arrived"
-                        igroup-size="sm" disabled />
-                    <x-adminlte-input name="etd" label="ETD" placeholder="Masukkan Estimated Date" igroup-size="sm"
-                        disabled />
-                    <x-adminlte-input name="no_kapal" label="No Kapal" placeholder="Masukkan Nomor Kapal" igroup-size="sm"
-                        disabled />
+                    <x-adminlte-input id="invoice" name="invoice" label="Nomor Invoice"
+                        placeholder="Masukkan nomor invoice" igroup-size="sm" />
+                    <x-adminlte-select id="status" name="status" label="Status" igroup-size="sm">
+                        <option value="" selected>- Pilih Status -</option>
+                        <option value="Received">Received</option>
+                        <option value="Not Receive">Not Receive</option>
+                    </x-adminlte-select>
                 </div>
             </div>
         </div>
@@ -230,9 +229,9 @@
                         name: 'status',
                         render: function(data) {
                             if (data == 'received' || data == 'Received') {
-                                return '<span class="badge bg-success">Received</span>'
+                                return '<span class="badge bg-success">Received</span>';
                             } else {
-                                return '<span class="badge bg-warning">Not Receive</span>'
+                                return '<span class="badge bg-warning">Not Receive</span>';
                             }
                         }
                     },
@@ -241,7 +240,7 @@
                         name: 'no',
                         render: function(data, full) {
                             return '<button class="btn btn-xs btn-primary" data-toggle="modal" data-target="#showModal" onclick="showDetail(' +
-                                data + ')">Detail</button>'
+                                data + ')">Detail</button>';
                         }
                     }
                 ]
@@ -252,7 +251,11 @@
             var kpValue = $('input[name="kp"]').val();
             var itemValue = $('input[name="item"]').val();
             var supplierValue = $('select[name="supplier"]').val();
-            dataTable.search(kpValue + ' ' + itemValue + ' ' + supplierValue).draw();
+            var invoiceValue = $('input[name="invoice"]').val();
+            var statusValue = $('select[name="status"]').val();
+            dataTable.search(kpValue + ' ' + itemValue + ' ' + supplierValue + ' ' + invoiceValue + ' ' +
+                    statusValue)
+                .draw();
         });
 
         function showDetail(id) {
@@ -303,10 +306,6 @@
 
 @section('css')
     <style>
-        .dataTables_wrapper .dataTables_filter {
-            display: none;
-        }
-
         #loading {
             background-color: #f8f9fa;
             padding: 10px;

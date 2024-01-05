@@ -9,19 +9,67 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 
-class PurchaseExport implements FromCollection, WithStyles
+class PurchaseExport implements FromCollection, WithStyles, ShouldAutoSize
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     
+    protected $purchase_supplier;
+    protected $purchase_etd;
+
+    public function __construct($purchase_supplier, $purchase_etd)
+    {
+        $this->purchase_supplier = $purchase_supplier;
+        $this->purchase_etd = $purchase_etd;
+    }
+
+    protected function dateRange($date)
+    {
+        $dateRange = explode(' - ', $date);
+        $startDate = $dateRange[0];
+        $endDate = $dateRange[1];
+        return [
+            $startDate, $endDate
+        ];
+    }
+
     public function collection()
     {
-        $kpData = Kp::all();
-        $data = $this->addCustomHeaderRow($kpData);
-        return $data;
+        if(isset($this->purchase_etd) && isset($this->purchase_supplier)) {
+            $purchaseData = Kp::whereBetween('etd', $this->dateRange($this->purchase_etd))
+                            ->where('supp', $this->purchase_supplier)
+                            ->get();
+            if($purchaseData->isNotEmpty()) {
+                $data = $this->addCustomHeaderRow($purchaseData);
+                return $data;
+            } else {
+                return collect();
+            }  
+        } elseif (isset($this->purchase_supplier)) {
+            $purchaseData = Kp::where('supp', $this->purchase_supplier)->get();
+            if($purchaseData->isNotEmpty()) {
+                $data = $this->addCustomHeaderRow($purchaseData);
+                return $data;
+            } else {
+                return collect();
+            }                  
+        } elseif (isset($this->purchase_etd)) {
+            $purchaseData = Kp::whereBetween('etd', $this->dateRange($this->purchase_etd))->get();
+            if($purchaseData->isNotEmpty()) {
+                $data = $this->addCustomHeaderRow($purchaseData);
+                return $data;
+            } else {
+                return collect();
+            }                  
+        } else {
+            $purchaseData = Kp::all();
+            $data = $this->addCustomHeaderRow($purchaseData);
+            return $data;
+        }        
     }
     
     private function addCustomHeaderRow(Collection $data)

@@ -41,13 +41,7 @@ class CertificateController extends Controller
         return response()->json([
             'success' => 'Certificate created successfully'
         ]);
-    }
-
-    public function getPassphrase()
-    {
-        $passphrase = env('PASSPHRASE');
-        return $passphrase;
-    }
+    }    
 
     protected function generateKeyPair()
     {        
@@ -74,9 +68,9 @@ class CertificateController extends Controller
         $x509 = openssl_csr_sign($csr, null, $privateKey, 365, ['digest_alg' => 'sha256']);        
         
         openssl_x509_export($x509, $certout);
-        openssl_pkey_export($privateKey, $pkeyout, $this->getPassphrase());
+        openssl_pkey_export($privateKey, $pkeyout, env('PASSPHRASE'));
 
-        if (openssl_csr_export($csr, $csrout) && openssl_x509_export($x509, $certout) && openssl_pkey_export($privateKey, $pkeyout, $this->getPassphrase())) {
+        if (openssl_csr_export($csr, $csrout) && openssl_x509_export($x509, $certout) && openssl_pkey_export($privateKey, $pkeyout, env('PASSPHRASE'))) {
             return [
                 'privateKey'        => $pkeyout,
                 'publicCertificate' => $certout

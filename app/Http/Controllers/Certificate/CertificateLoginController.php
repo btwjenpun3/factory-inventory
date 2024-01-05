@@ -60,10 +60,8 @@ class CertificateLoginController extends Controller
             if(file_exists($privateKeyPath)) {
                 $certificatePath    = storage_path('app/' . $certificatePath); 
                 $certificateContent = file_get_contents($certificatePath);
-                $privateKeyContent  = file_get_contents($privateKeyPath);
-                $getPasshprase      = new CertificateController;
-                $passphrase         = $getPasshprase->getPassphrase();            
-                $privateKey =  openssl_pkey_get_private($privateKeyContent, $passphrase);   
+                $privateKeyContent  = file_get_contents($privateKeyPath);           
+                $privateKey         =  openssl_pkey_get_private($privateKeyContent, env('PASSPHRASE'));   
                 return openssl_x509_check_private_key($certificateContent, $privateKey);
             } else {
                 return false;
