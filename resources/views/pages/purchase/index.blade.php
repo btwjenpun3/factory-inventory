@@ -306,6 +306,10 @@
 
 @section('css')
     <style>
+        .dataTables_filter {
+            display: none;
+        }
+
         #loading {
             background-color: #f8f9fa;
             padding: 10px;

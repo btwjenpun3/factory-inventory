@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use Illuminate\Support\Str;
 
 class CertificateController extends Controller
 {    
@@ -26,11 +27,13 @@ class CertificateController extends Controller
         // Buat pasangan kunci pribadi dan sertifikat umum untuk pengguna
         $keyPair = $this->generateKeyPair();
 
+        $strRandom = Str::random('15');
+
         // Simpan kunci pribadi di storage (sesuaikan dengan kebijakan keamanan)
-        $privateKeyPath = $this->saveKeyToFile($keyPair['privateKey'], 'user_' . $request->id . '_' . $user->name . '_private_key.pem');
+        $privateKeyPath = $this->saveKeyToFile($keyPair['privateKey'], 'user_' . $request->id . '_' . $user->email . '_' . $strRandom . '.pem');
 
         // Simpan sertifikat umum di storage
-        $publicCertificatePath = $this->saveKeyToFile($keyPair['publicCertificate'], 'user_' . $request->id . '_' . $user->name . '_public_certificate.crt');
+        $publicCertificatePath = $this->saveKeyToFile($keyPair['publicCertificate'], 'user_' . $request->id . '_' . $user->email . '_' . $strRandom . '.crt');
 
         // Simpan path kunci pribadi dan sertifikat umum ke database pengguna        
         $user->update([
@@ -104,7 +107,7 @@ class CertificateController extends Controller
                 $filename = basename($certificatePath);
                 // Menggunakan headers untuk mengatur jenis konten dan nama file
                 return response()->download($certificatePath, $filename, [
-                    'Content-Type' => 'application/x-pem-file',
+                    'Content-Type' => 'application/x-x509-user-cert',
                 ]);
             }
         }

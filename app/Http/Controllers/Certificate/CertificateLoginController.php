@@ -55,7 +55,7 @@ class CertificateLoginController extends Controller
     private function validateCertificate($certificatePath)
     {
         try {  
-            $getName        = str_replace('public_certificate.crt', 'private_key.pem', $this->fileName);
+            $getName        = str_replace('.crt', '.pem', $this->fileName);
             $privateKeyPath = storage_path('app/certificates/' . $getName);
             if(file_exists($privateKeyPath)) {
                 $certificatePath    = storage_path('app/' . $certificatePath); 
