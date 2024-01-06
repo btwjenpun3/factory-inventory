@@ -66,16 +66,26 @@
                         data: 'public_certificate_path',
                         name: 'public_certificate_path',
                         render: function(data, type, row) {
-                            var certificate = data.split('/').pop();
-                            return '<p class="text-info">' + certificate + '</p>';
+                            if (data) {
+                                var certificate = data.split('/').pop();
+                                return '<p class="text-info">' + certificate + '</p>';
+                            } else {
+                                return '<p class="text-danger"><i>Please Generate New Certificate for this User</i></p>';
+                            }
+
                         }
                     },
                     {
                         data: 'id',
                         name: 'id',
-                        render: function(data, full) {
-                            return '<button class="btn btn-xs btn-success" onclick="downloadCertificate(' +
-                                data + ')">Download</button>';
+                        render: function(data, full, row) {
+                            console.log(full);
+                            if (row.public_certificate_path) {
+                                return '<button class="btn btn-xs btn-success" onclick="downloadCertificate(' +
+                                    data + ')">Download</button>';
+                            } else {
+                                return '<button class="btn btn-xs btn-secondary" disabled>Download</button>';
+                            }
                         }
                     },
                 ]
