@@ -18,59 +18,60 @@ class PurchaseExport implements FromCollection, WithStyles, ShouldAutoSize
     * @return \Illuminate\Support\Collection
     */
     
-    protected $purchase_supplier;
-    protected $purchase_etd;
+    protected $supplier;
+    protected $etd;
 
-    public function __construct($purchase_supplier, $purchase_etd)
+    public function __construct($supplier, $etd)
     {
-        $this->purchase_supplier = $purchase_supplier;
-        $this->purchase_etd = $purchase_etd;
+        $this->supplier = $supplier;
+        $this->etd = $etd;
     }
 
     protected function dateRange($date)
     {
-        $dateRange = explode(' - ', $date);
-        $startDate = $dateRange[0];
-        $endDate = $dateRange[1];
-        return [
-            $startDate, $endDate
-        ];
+        if(!is_null($date)){
+            $dateRange = explode(' - ', $date);
+            $startDate = $dateRange[0];
+            $endDate = $dateRange[1];
+            return [
+                $startDate, $endDate
+            ];
+        } else {
+            return null;
+        }        
     }
 
     public function collection()
-    {
-        if(isset($this->purchase_etd) && isset($this->purchase_supplier)) {
-            $purchaseData = Kp::whereBetween('etd', $this->dateRange($this->purchase_etd))
-                            ->where('supp', $this->purchase_supplier)
-                            ->get();
-            if($purchaseData->isNotEmpty()) {
-                $data = $this->addCustomHeaderRow($purchaseData);
-                return $data;
-            } else {
-                return collect();
-            }  
-        } elseif (isset($this->purchase_supplier)) {
-            $purchaseData = Kp::where('supp', $this->purchase_supplier)->get();
-            if($purchaseData->isNotEmpty()) {
-                $data = $this->addCustomHeaderRow($purchaseData);
-                return $data;
-            } else {
-                return collect();
-            }                  
-        } elseif (isset($this->purchase_etd)) {
-            $purchaseData = Kp::whereBetween('etd', $this->dateRange($this->purchase_etd))->get();
-            if($purchaseData->isNotEmpty()) {
-                $data = $this->addCustomHeaderRow($purchaseData);
-                return $data;
-            } else {
-                return collect();
-            }                  
-        } else {
-            $purchaseData = Kp::all();
+    {        
+        $etdRange = $this->dateRange($this->etd);
+        $supplierData = $this->supplier;
+
+        /**
+         * Gunakan query dimana jika data $etdRange dan $supplierData kosong, maka akan di lewati
+         * Menggunakan metode ini karena untuk menghindari if-else yang terlalu banyak
+         */
+
+        $query = Kp::query();
+        $query->when($etdRange, function ($get) use ($etdRange) {
+            return $get->whereBetween('etd', $etdRange);
+        });
+        $query->when($supplierData, function ($get) use ($supplierData) {
+            return $get->where('supp', $supplierData);
+        });
+        $purchaseData = $query->get();
+
+        /**
+         * Jika hasil $query tidak null, maka data yang berada di dalam excel sesuai dengan data $query
+         * Jika hasil $query adalah null, maka data di excel berisi data kosong
+         */
+        
+        if($purchaseData->isNotEmpty()) {
             $data = $this->addCustomHeaderRow($purchaseData);
             return $data;
+        } else {
+            return collect();
         }        
-    }
+    }   
     
     private function addCustomHeaderRow(Collection $data)
     {

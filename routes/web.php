@@ -29,9 +29,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/**
+ * Route Utama ke arah halaman index
+ */
+
 Route::get('/', function () {
     return view('main.index');
 })->middleware('islogin');
+
+/**
+ * Route ke arah Upload Sertifikat
+ */
 
 Route::prefix('/verify')
     ->name('verify.')
@@ -41,6 +49,10 @@ Route::prefix('/verify')
         Route::post('/upload', 'authenticateWithCertificate')->name('login');
         Route::get('/purge', 'purgeCertificateSession')->name('purge');
     });
+
+/**
+ * Route ke arah Halaman Login
+ */
 
 Route::prefix('/auth')
     ->name('auth.')
@@ -52,6 +64,11 @@ Route::prefix('/auth')
         Route::post('/register', 'registerProcess')->middleware('authenticate-with-certificate');
         Route::post('/logout', 'logout')->middleware('islogin');
     });
+
+/**
+ * Route ke arah Datatables
+ * Semua Datatable yang muncul di Web, berasal dari Route ini
+ */
 
 Route::prefix('/datatables')
     ->name('datatable.')
@@ -70,6 +87,11 @@ Route::prefix('/datatables')
         Route::get('/certificates', 'certificates')->name('certificates');
     });
 
+/**
+ * Route ke arah Chart
+ * Semua gambar Chart yang ada di web, semua berasal dari Route ini
+ */
+
 Route::prefix('/charts')
     ->name('chart.')
     ->middleware('islogin')
@@ -77,6 +99,10 @@ Route::prefix('/charts')
     ->group(function() {
         Route::get('/kp', 'kpChart')->name('kp');
     });
+
+/**
+ * Route ke arah menu Master
+ */
 
 Route::prefix('/master/item')
     ->name('master.item.')
@@ -114,6 +140,10 @@ Route::prefix('/master/supplier')
         Route::get('/', 'supplierIndex')->name('index');
     }); 
 
+/**
+ * Route ke arah menu Purchase
+ */
+
 Route::prefix('/purchase')
     ->name('purchase.')
     ->middleware('islogin')
@@ -123,6 +153,9 @@ Route::prefix('/purchase')
         Route::get('/show/{id}', 'showDetail')->name('detail');
     }); 
 
+/**
+ * Route ke arah menu Warehouse
+ */
 Route::prefix('/warehouse')
     ->name('warehouse.')
     ->middleware('islogin')
@@ -132,6 +165,10 @@ Route::prefix('/warehouse')
         Route::get('/request', 'requestIndex')->name('request.index');
     }); 
 
+/**
+ * Route ke arah menu Graphics
+ */
+
 Route::prefix('/graphics')
     ->name('graphic.')
     ->middleware('islogin')
@@ -139,6 +176,10 @@ Route::prefix('/graphics')
     ->group(function() {
         Route::get('/', 'index')->name('index');
     }); 
+
+/**
+ * Route ke arah menu Exports
+ */
 
 Route::prefix('/exports')
     ->name('export.')
@@ -149,6 +190,11 @@ Route::prefix('/exports')
         Route::get('/export/excel', 'exportToExcel')->name('excel');
     }); 
 
+/**
+ * Route ke arah menu Settings
+ * Mulai dari sini semua menu hanya bisa diakses oleh Admin
+ */
+
 Route::prefix('/settings')
     ->name('setting.')
     ->middleware('islogin')
@@ -156,7 +202,10 @@ Route::prefix('/settings')
     ->group(function() {
         Route::get('/', 'index')->name('index');
     }); 
-    
+ 
+/**
+ * Route ke arah menu Users
+ */
 Route::prefix('/users')
     ->name('user.')
     ->middleware('islogin')
@@ -170,6 +219,10 @@ Route::prefix('/users')
         Route::delete('/delete/{id}', 'delete');
     });
 
+/**
+ * Route ke arah menu Roles
+ */
+
 Route::prefix('/roles')
     ->name('role.')
     ->middleware('islogin')
@@ -182,6 +235,10 @@ Route::prefix('/roles')
         Route::get('/name/{id}', 'getRole');
         Route::delete('/delete/{id}', 'delete');
     });
+
+/**
+ * Route ke arah menu Certificates
+ */
 
 Route::prefix('/certificates')
     ->name('certificate.')

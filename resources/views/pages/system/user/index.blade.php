@@ -12,7 +12,7 @@
     <div class="collapse multi-collapse" id="createCollapse">
         <div class="container">
             <div id="create_failed" class="pt-4"></div>
-            <x-adminlte-card class="mt-4" title="Add New User">
+            <x-adminlte-card title="Add New User">
                 <x-adminlte-input id="create_name" name="create_name" label="Name" igroup-size="sm" />
                 <x-adminlte-input id="create_email" name="create_email" label="Email" igroup-size="sm" />
                 <x-adminlte-input id="create_password" name="create_password" label="Password" igroup-size="sm" />
