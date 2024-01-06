@@ -41,11 +41,11 @@ Route::get('/', function () {
  * Route ke arah Upload Sertifikat
  */
 
-Route::prefix('/verify')
+Route::prefix('/verification')
     ->name('verify.')
     ->controller(CertificateLoginController::class)
     ->group(function() {
-        Route::get('/upload', 'index')->name('index');
+        Route::get('/', 'index')->name('index');
         Route::post('/upload', 'authenticateWithCertificate')->name('login');
         Route::get('/purge', 'purgeCertificateSession')->name('purge');
     });
