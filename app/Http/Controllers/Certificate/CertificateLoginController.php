@@ -20,7 +20,7 @@ class CertificateLoginController extends Controller
     public function purgeCertificateSession() 
     {
         try {
-            session()->forget('authenticated_with_certificate');
+            session()->flush();
             return redirect()->route('verify.index');
         } catch(\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -38,8 +38,15 @@ class CertificateLoginController extends Controller
                 $this->fileName         = $uploadedCertificate->getClientOriginalName();
                 $path = $uploadedCertificate->storeAs('uploaded_certificates', $this->fileName);             
                 if ($this->validateCertificate($path)) {   
-                    Storage::delete($path);           
-                    session(['authenticated_with_certificate' => true]);            
+                    Storage::delete($path);  
+                    /**
+                     * Mengambil email dari nama $fileName kemudian di jadikan session 'accepted_<nama_email>"
+                     */
+                    $certificateName = $this->fileName;
+                    $pattern = '/user_\d+_(\S+?)_/'; 
+                    preg_match($pattern, $certificateName, $matches);                        
+                    session(['accepted_' . $matches[1] => true]); 
+                               
                     return redirect()->route('auth.login.index');
                 }
                 Storage::delete($path);

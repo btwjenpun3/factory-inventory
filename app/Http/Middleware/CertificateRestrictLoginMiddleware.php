@@ -5,9 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\User;
 
-class CertificateLoginMiddleware
+class CertificateRestrictLoginMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,15 +14,12 @@ class CertificateLoginMiddleware
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {        
-        // Mendapatkan array dari semua nama session yang ada
+    {
         $sessionNames = collect(session()->all())->keys()->toArray();
-
-        // Pemeriksaan apakah ada sesi yang mengandung kata "accepted_"
         if (collect($sessionNames)->contains(fn($name) => str_contains($name, 'accepted_'))) {
+            return redirect()->route('auth.login.index')->with('restrict', 'You already verification using your Certificate!');
+        } else {            
             return $next($request);
-        } else {
-            return redirect()->route('verify.index')->with('error', 'Please verify your Certificate first!');
         }
     }
 }

@@ -45,8 +45,8 @@ Route::prefix('/verification')
     ->name('verify.')
     ->controller(CertificateLoginController::class)
     ->group(function() {
-        Route::get('/', 'index')->name('index');
-        Route::post('/upload', 'authenticateWithCertificate')->name('login');
+        Route::get('/', 'index')->name('index')->middleware('authenticate-already-validate');
+        Route::post('/upload', 'authenticateWithCertificate')->name('login')->middleware('authenticate-already-validate');
         Route::get('/purge', 'purgeCertificateSession')->name('purge');
     });
 

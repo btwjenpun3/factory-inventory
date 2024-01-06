@@ -20,8 +20,14 @@ class AuthController extends Controller
             'password'  => ['required'],
         ]); 
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate(); 
-            return redirect()->intended('/');
+            if(session()->has('accepted_' . $request->email)) {
+                $request->session()->regenerate(); 
+                return redirect()->intended('/');
+            } else {
+                return back()->with([
+                    'error' => 'Email and Certificate is not matched! Please login using match Email with this Certificate!',
+                ])->onlyInput('email');
+            }            
         } 
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',

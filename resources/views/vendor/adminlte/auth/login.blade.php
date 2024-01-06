@@ -21,12 +21,20 @@
 @section('auth_header', __('adminlte::adminlte.login_message'))
 
 @section('auth_body')
-    @if (session()->has('authenticated_with_certificate'))
-        <div class="alert alert-success" role="alert">
-            Thank you! Please continue login to your account.
+    <div class="alert alert-success" role="alert">
+        Thank you! Please continue login to your account.
+    </div>
+    <div class="alert alert-info" role="alert">
+        <a href="{{ route('verify.purge') }}">Click here</a> if you want return to Certificate Upload.
+    </div>
+    @if (session()->has('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
         </div>
-        <div class="alert alert-info" role="alert">
-            <a href="{{ route('verify.purge') }}">Click here</a> if you want return to Certificate Upload.
+    @endif
+    @if (session()->has('restrict'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('restrict') }}
         </div>
     @endif
     <form action="{{ $login_url }}" method="post">
