@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Buyer;
 use App\Models\Item;
+use App\Models\Kp;
+use Illuminate\Support\Facades\Log;
 
 class MasterItemController extends Controller
 {
@@ -18,23 +20,29 @@ class MasterItemController extends Controller
     }   
 
     public function itemStore(Request $request)
-    {   
-        $validate = $request->validate([
-            'code_buyer'    => 'required',
-            'items'         => 'required',
-            'desc'          => 'required'
-        ]);
-        if($validate) 
-        {
-            Item::create([
-                'code_buyer'    => $request->code_buyer,
-                'items'         => $request->items,
-                'desc'          => $request->desc
+    { 
+        try {
+            $validate = $request->validate([
+                'code_buyer'    => 'required',
+                'items'         => 'required',
+                'desc'          => 'required'
             ]);
+            if ($validate) {
+                Item::create([
+                    'code_buyer'    => $request->code_buyer,
+                    'items'         => $request->items,
+                    'desc'          => $request->desc
+                ]);
+                return response()->json([
+                    'success' => 'Data successfully created'
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('master')->error('(Master Item) Theres an error : ' . $e->getMessage());
             return response()->json([
-                'success' => 'Data successfully created'
-            ]);
-        }
+                'message' => 'Invalid Code Buyer, Items, or Desc. Please check again!'
+            ], 400);
+        }       
     }
 
     public function itemShow(Request $request)
@@ -50,16 +58,14 @@ class MasterItemController extends Controller
             'items'         => 'required',
             'desc'          => 'required'
         ]);
-        if($validate) 
-        {
-            Item::where('id_item', $request->id)->update([
-                'code_buyer'    => $request->code_buyer,
+        if ($validate) {
+            $item = Item::where('id_item', $request->id)->first();            
+            $item->update([
+                'code_buyer'    => $request->code_buyer,                
                 'items'         => $request->items,
                 'desc'          => $request->desc
-            ]);
-            return response()->json([
-                'success' => 'Data successfully updated'
-            ]);
+            ]); 
+            return response()->json(['success' => 'Data successfully update'], 200);      
         }
     }
 

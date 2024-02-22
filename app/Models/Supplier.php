@@ -13,7 +13,7 @@ class Supplier extends Model
 
     protected $primaryKey = 'id_supplier'; 
 
-    protected $protected = [
+    protected $guarded = [
         'id_supplier'
     ];
 

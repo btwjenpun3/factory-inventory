@@ -6,7 +6,9 @@
 
 @section('content')
     <div class="mb-3">
-        <button class="btn btn-primary" data-toggle="collapse" data-target="#createCollapse">Tambah</button>
+        <button class="btn-sm btn-success" data-toggle="collapse" data-target="#createCollapse">
+            <i class="fas fa-plus"></i> Add
+        </button>
     </div>
 
     <div class="collapse multi-collapse" id="createCollapse">
@@ -27,6 +29,7 @@
     </div>
 
     <div id="edit_success"></div>
+
     <x-adminlte-card class="mt-4" title="Master Item">
         <table class="table table-striped table-hover responsive" id="item">
             <thead class="thead-dark">
@@ -40,7 +43,7 @@
         </table>
     </x-adminlte-card>
 
-    <x-adminlte-modal id="editModal" title="Edit Master Item" theme="primary" size="md" disable-animations>
+    <x-adminlte-modal id="editModal" title="Edit Master Item" theme="primary" size="md">
         <div class="container">
             <div id="edit_failed"></div>
             <x-adminlte-card class="mt-4" title="Edit Master Item">
@@ -110,6 +113,44 @@
                     },
                 ]
             });
+
+            $('#update').click(function() {
+                $.ajax({
+                    url: '/master/item/update/' + getItem,
+                    type: 'post',
+                    data: {
+                        code_buyer: $('#edit_code_buyer').val(),
+                        items: $('#edit_items').val(),
+                        desc: $('#edit_desc').val(),
+                        _token: token
+                    },
+                    success: function(response) {
+                        var successMessage = document.createElement(
+                            "div");
+                        successMessage.className =
+                            "alert alert-success";
+                        successMessage.textContent = response.success;
+                        $('#editModal').modal('hide');
+                        $('#edit_success').html(successMessage);
+                        $('#item').DataTable().ajax.reload();
+                        setTimeout(function() {
+                            successMessage.remove();
+                        }, 5000);
+                    },
+                    error: function(xhr, error, status) {
+                        var errorMessage = document.createElement(
+                            "div");
+                        errorMessage.className = "alert alert-danger";
+                        errorMessage.textContent = xhr.responseJSON.message;
+                        $('#edit_failed').html(errorMessage);
+                        setTimeout(function() {
+                            errorMessage.remove();
+                        }, 5000);
+
+                    }
+                });
+
+            });
         });
 
         function store() {
@@ -160,47 +201,6 @@
                 error: function(xhr, error, status) {}
             });
         }
-
-        $(document).ready(function() {
-            $('#update').click(function() {
-                $.ajax({
-                    url: '/master/item/update/' + getItem,
-                    type: 'post',
-                    data: {
-                        code_buyer: $('#edit_code_buyer').val(),
-                        items: $('#edit_items').val(),
-                        desc: $('#edit_desc').val(),
-                        _token: token
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        var successMessage = document.createElement(
-                            "div");
-                        successMessage.className =
-                            "alert alert-success";
-                        successMessage.textContent = response.success;
-                        $('#editModal').modal('hide');
-                        $('#edit_success').html(successMessage);
-                        $('#item').DataTable().ajax.reload();
-                        setTimeout(function() {
-                            successMessage.remove();
-                        }, 5000);
-                    },
-                    error: function(xhr, error, status) {
-                        var errorMessage = document.createElement(
-                            "div");
-                        errorMessage.className = "alert alert-danger";
-                        errorMessage.textContent = xhr.responseJSON.message;
-                        $('#edit_failed').html(errorMessage);
-                        setTimeout(function() {
-                            errorMessage.remove();
-                        }, 5000);
-
-                    }
-                });
-
-            });
-        });
 
         function deleteItem(item) {
             Swal.fire({

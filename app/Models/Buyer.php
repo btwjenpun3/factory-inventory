@@ -11,6 +11,8 @@ class Buyer extends Model
 
     protected $table = 'buyer';
 
+    protected $guarded = ['id_buyer'];
+
     protected $primaryKey = 'code';
 
     public $incrementing = false;

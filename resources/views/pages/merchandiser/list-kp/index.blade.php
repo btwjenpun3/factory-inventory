@@ -2,9 +2,11 @@
 
 @section('content')
     <div class="pt-4">
-        <button type="button" class="btn-sm btn-primary" data-toggle="collapse" data-target="#searchCollapse">
-            <i class="fas fa-search"></i> Search Data
-        </button>
+        <div class="row">
+            <button type="button" class="btn-sm btn-info mx-2" data-toggle="collapse" data-target="#searchCollapse">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
     </div>
 
     <div class="collapse multi-collapse" id="searchCollapse">
@@ -183,7 +185,7 @@
                 autoWidth: false,
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('datatable.purchase') }}',
+                ajax: '{{ route('datatable.merchandiser.order.plan') }}',
                 order: [
                     [0, 'desc']
                 ],
@@ -263,7 +265,7 @@
             $('#showDetailTable').hide();
             $('#loading').show();
             $.ajax({
-                url: '/purchase/show/' + userId,
+                url: '/merchandiser/show/' + userId,
                 type: 'GET',
                 success: function(response) {
                     $('#show_kp').html(response.kp);

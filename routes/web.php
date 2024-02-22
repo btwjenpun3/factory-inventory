@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Approval\OrderPlanApprovalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Certificate\CertificateController;
 use App\Http\Controllers\Certificate\CertificateLoginController;
@@ -7,10 +8,12 @@ use App\Http\Controllers\Chart\ChartController;
 use App\Http\Controllers\DataTables\DatatablesController;
 use App\Http\Controllers\Export\ExportController;
 use App\Http\Controllers\Graphic\GraphicController;
+use App\Http\Controllers\Master\MasterAllocation;
 use App\Http\Controllers\Master\MasterBuyerController;
 use App\Http\Controllers\Master\MasterItemController;
 use App\Http\Controllers\Master\MasterKpController;
 use App\Http\Controllers\Master\MasterSupplierController;
+use App\Http\Controllers\Purchase\PurchasingController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\System\RoleController;
 use App\Http\Controllers\System\SettingController;
@@ -75,11 +78,15 @@ Route::prefix('/datatables')
     ->middleware('islogin')
     ->controller(DatatablesController::class)
     ->group(function() {
+        Route::get('/allocation', 'allocation')->name('allocation');
         Route::get('/item', 'item')->name('item');
         Route::get('/buyer', 'buyer')->name('buyer');
         Route::get('/kp', 'kp')->name('kp');
+        Route::get('/kp/temporary', 'kpTemporary')->name('kp.temporary');
+        Route::get('/approval/order/plan', 'approvalOrderPlan')->name('approval.order.plan');
         Route::get('/supplier', 'supplier')->name('supplier');
-        Route::get('/purchase', 'purchase')->name('purchase');
+        Route::get('/merchandiser/order-plan', 'merchandiserOrderPlan')->name('merchandiser.order.plan');
+        Route::get('/purchase/purchasing', 'purchasePurchasing')->name('purchase.purchasing');
         Route::get('/warehouse-receive', 'warehouseReceive')->name('warehouse.receive');
         Route::get('/warehouse-request', 'warehouseRequest')->name('warehouse.request');
         Route::get('/users', 'users')->name('users');
@@ -104,6 +111,18 @@ Route::prefix('/charts')
  * Route ke arah menu Master
  */
 
+Route::prefix('/master/allocation')
+    ->name('master.allocation.')
+    ->middleware('islogin')
+    ->controller(MasterAllocation::class)
+    ->group(function() {
+        Route::get('/', 'allocationIndex')->name('index');
+        Route::post('/store', 'allocationStore')->name('store');
+        Route::get('/show/{id}', 'allocationShow')->name('show');
+        Route::post('/update/{id}', 'allocationUpdate');
+        Route::delete('/delete/{id}', 'allocationDelete')->name('delete');
+    });
+
 Route::prefix('/master/item')
     ->name('master.item.')
     ->middleware('islogin')
@@ -121,7 +140,11 @@ Route::prefix('/master/buyer')
     ->middleware('islogin')
     ->controller(MasterBuyerController::class)
     ->group(function() {
-        Route::get('/', 'buyerIndex')->name('index');
+        Route::get('/', 'buyerIndex')->name('index');        
+        Route::post('/store', 'buyerStore')->name('store');
+        Route::get('/show/{id}', 'buyerShow')->name('show');
+        Route::post('/update/{id}', 'buyerUpdate')->name('update');
+        Route::delete('/delete/{id}', 'buyerDelete')->name('delete');
     }); 
 
 Route::prefix('/master/kp')
@@ -138,19 +161,59 @@ Route::prefix('/master/supplier')
     ->controller(MasterSupplierController::class)
     ->group(function() {
         Route::get('/', 'supplierIndex')->name('index');
+        Route::post('/store', 'supplierStore')->name('store');
+        Route::get('/show/{id}', 'supplierShow')->name('show');
+        Route::post('/update/{idSupplier}', 'supplierUpdate')->name('update');
+        Route::delete('/delete/{id}', 'supplierDelete')->name('delete');
     }); 
 
 /**
  * Route ke arah menu Purchase
  */
 
-Route::prefix('/purchase')
-    ->name('purchase.')
+Route::prefix('/merchandiser')
+    ->name('merchandiser.')
     ->middleware('islogin')
     ->controller(PurchaseController::class)
     ->group(function() {
+        Route::get('/order/plan', 'indexOrderPlan')->name('index.order.plan');
+        Route::get('/list/kp', 'indexListKp')->name('index.list.kp');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/show/{id}', 'showDetail')->name('detail');        
+        Route::get('/show/temporary/{id}', 'showTemporary')->name('show');
+        Route::post('/approve/all', 'approveAll')->name('approve.all');
+        Route::get('/get-item', 'getItem')->name('get.item');
+        Route::get('/get-quantity-garment', 'getQuantityGarment')->name('get.quantity.garment');
+        Route::delete('/delete/{id}', 'destroy')->name('destroy');
+    }); 
+
+/**
+ * Route ke arah menu Approval
+ */
+
+ Route::prefix('/approval')
+    ->name('approval.')
+    ->middleware('islogin')
+    ->controller(OrderPlanApprovalController::class)
+    ->group(function() {
         Route::get('/', 'index')->name('index');
-        Route::get('/show/{id}', 'showDetail')->name('detail');
+        Route::post('/approve/{id}', 'approve')->name('approve');
+        Route::post('/reject/{id}', 'reject')->name('reject');
+    }); 
+
+/**
+ * Route ke arah menu Purchase
+ */
+
+ Route::prefix('/purchase')
+    ->name('purchase.')
+    ->middleware('islogin')
+    ->controller(PurchasingController::class)
+    ->group(function() {
+        Route::get('/', 'index')->name('index');
+        Route::get('/show/{id}', 'show')->name('show');
+        Route::post('/update/{id}', 'update')->name('update');
+        Route::post('/approve/{id}', 'approve')->name('approve');
     }); 
 
 /**

@@ -319,6 +319,11 @@ return [
             'icon'    => 'fas fa-fw fa-database',
             'submenu' => [
                 [
+                    'text' => 'Master Allocation',
+                    'route'  => 'master.allocation.index',
+                    'can' => 'view-master-allocation'
+                ],
+                [
                     'text' => 'Master Item',
                     'route'  => 'master.item.index',
                     'can' => 'view-master-item'
@@ -326,11 +331,7 @@ return [
                 [
                     'text' => 'Master Buyer',
                     'route'  => 'master.buyer.index',
-                ],
-                [
-                    'text' => 'Master KP',
-                    'route'  => 'master.kp.index',
-                ],
+                ],                
                 [
                     'text' => 'Master Supplier',
                     'route'  => 'master.supplier.index',
@@ -338,25 +339,55 @@ return [
             ],
         ],
         [
-            'text' => 'Purchase',
-            'route'  => 'purchase.index',
-            'icon' => 'fas fa-fw fa-file-invoice',
-            'can' => 'view-purchase'
-        ],
+            'text'    => 'Mechandiser',
+            'icon'    => 'fas fa-fw fa-file-invoice',
+            'submenu' => [
+                [
+                    'text' => 'Order Plan',
+                    'route'  => 'merchandiser.index.order.plan',
+                    'can' => 'view-merchandiser-order-plan'
+                ],  
+                [
+                    'text' => 'List Production Card',
+                    'route'  => 'merchandiser.index.list.kp',
+                    'can' => 'view-merchandiser-production-card'
+                ],              
+            ],
+        ],  
+        [
+            'text'    => 'Approval',
+            'icon'    => 'fas fa-fw fa-check-square',
+            'can' => 'view-approval-order-plan',
+            'submenu' => [
+                [
+                    'text' => 'Order Plan',
+                    'route'  => 'approval.index',
+                    'can' => 'view-approval-order-plan'
+                ],             
+            ],
+        ],   
+        [
+            'text'    => 'Purchase',
+            'icon'    => 'fas fa-fw fa-list',
+            'submenu' => [
+                [
+                    'text' => 'Purchasing',
+                    'route'  => 'purchase.index',
+                    'can' => 'view-purchase-purchasing'
+                ],
+            ],
+        ],   
         [
             'text'    => 'Warehouse',
-            'icon'    => 'fas fa-fw fa-home',
+            'icon'    => 'fas fa-fw fa-home',            
             'submenu' => [
                 [
                     'text' => 'Received',
                     'route'  => 'warehouse.receive.index',
-                ],
-                [
-                    'text' => 'Request List',
-                    'route'  => 'warehouse.request.index',
-                ]
+                    'can' => 'view-warehouse-received'
+                ],                
             ],
-        ], 
+        ],         
         [
             'header' => 'TOOLS',
         ], 

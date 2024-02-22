@@ -5,17 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Kp extends Model
+class OrderBuy extends Model
 {
     use HasFactory;
 
-    protected $table = 'kp';
+    protected $table = 'order_buy';
 
-    protected $primaryKey = 'no'; 
+    protected $primaryKey = 'id'; 
 
-    protected $guarded = [
-        'no'
-    ];
+    protected $guarded = ['id'];
 
     public $timestamps = false;
 }
